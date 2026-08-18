@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>架空寺</title>
+<style>
+  body {
+    font-family: "Yu Mincho", "MS Mincho", serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #e9e4d4;
+  }
+  .slot-machine {
+    display: flex;
+    font-size: 6rem; /* 4remの1.5倍 */
+    font-weight: bold;
+    background: #fff;
+    padding: 22px 30px; /* 余白も約1.5倍に */
+    border-radius: 8px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    border: 5px solid #2c3e50;
+    color: #2c3e50;
+  }
+  .reel {
+    width: 120px; /* 80pxの1.5倍 */
+    text-align: center;
+    border-right: 2px dashed #ccc;
+  }
+  .suffix {
+    width: 120px; /* 80pxの1.5倍 */
+    text-align: center;
+    color: #7f8c8d;
+  }
+  button {
+    margin-top: 45px; /* 30pxの1.5倍 */
+    padding: 22px 60px; /* 15px 40pxの約1.5倍 */
+    font-size: 1.8rem; /* 1.2remの1.5倍 */
+    cursor: pointer;
+    background-color: #c0392b;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+  }
+</style>
+</head>
+<body>
+  <div class="slot-machine">
+    <div id="reel1" class="reel">架</div>
+    <div id="reel2" class="reel">空</div>
+    <div class="suffix">寺</div>
+  </div>
+  <button id="spinButton">輪転</button>
+
+  <script>
+    // 常用漢字フルセット
+    const fullJoyoKanji = "亜哀挨愛曖悪握圧扱宛嵐安案暗以衣位囲医依委威為畏胃尉異移萎偉椅彙意違維慰遺緯域育一壱逸茨芋引印因咽姻員院淫陰飲隠韻右宇羽雨唄鬱畝浦運雲永泳英映栄営詠影鋭衛易疫益液駅悦越謁閲円延沿炎怨宴媛援園煙猿遠鉛塩演縁艶汚王凹央応往押旺欧殴桜翁奥横岡屋億憶臆虞乙俺卸音恩温穏下化火加可仮何花佳価果河苛科架夏家荷華菓貨渦過嫁暇禍靴寡歌箇稼課蚊牙瓦我画芽賀雅餓介回灰会快戒改怪拐悔海界皆械絵開階塊楷解潰壊懐諧貝外劾害崖涯街慨蓋該概骸垣柿各角拡革格核殻郭覚較隔閣確獲嚇穫学岳楽額顎掛潟括活喝渇割葛滑褐轄且株釜鎌刈干刊甘汗缶完肝官冠巻看陥乾勘患貫寒喚堪換敢棺款間閑勧寛幹感漢慣管関歓監緩憾還館環簡観韓艦鑑丸含岸岩玩眼頑顔願企伎危机気岐希忌汽奇祈季紀軌既記起飢鬼帰基寄著規亀喜幾揮期棋貴棄毀旗器機騎技宜偽欺義疑儀戯擬犠菊吉喫詰却客脚逆虐九久及弓丘旧休吸朽臼求究泣急級糾宮救球給嗅窮牛去巨居拒拠挙虚許距魚御漁凶共叫狂京享供協況峡挟狭恐恭胸脅強教郷境橋矯鏡競響驚仰暁業凝曲局極玉巾斤均近金菌勤琴筋僅禁緊錦謹襟吟銀区句苦駆具愚空偶遇隅串屈掘窟熊繰君訓勲薫軍郡群兄刑形系径泥恵慶慧憩掲携敬景渓系経継茎蛍計警軽鶏芸迎鯨劇撃激隙桁欠穴血決結傑潔月犬件見券肩建研県倹兼剣拳軒健険圏堅検嫌献絹遣権憲賢謙鍵繭顕験懸元幻玄言弦限原現舷減源厳己戸古呼固股虎孤弧故枯個庫湖雇誇鼓錮顧五互午後語誤護交侯候光公功効厚口向后坑好孔孝宏工巧幸広交康弘恒慌抗拘控攻更校構江洪狡甲皇硬稿紅絞綱耕考肯腕宛嵐安案暗以衣位囲医依委威為畏胃尉異移萎偉椅彙意違維慰遺緯域育一壱逸茨芋引印因咽姻員院淫陰飲隠韻右宇羽雨唄鬱畝浦運雲永泳英映栄営詠影鋭衛易疫益液駅悦越謁閲円延沿炎怨宴媛援園煙猿遠鉛塩演縁艶汚王凹央応往押旺欧殴桜翁奥横岡屋億憶臆虞乙俺卸音恩温穏下化火加可仮何花佳価果河苛科架夏家荷華菓貨渦過嫁暇禍靴寡歌箇稼課蚊牙瓦我画芽賀雅餓介回灰会快戒改怪拐悔海界皆械絵開階塊楷解潰壊懐諧貝外劾害崖涯街慨蓋該概骸垣柿各角拡革格核殻郭覚較隔閣確獲嚇穫学岳楽額顎掛潟括活喝渇割葛滑褐轄且株釜鎌刈干刊甘汗缶完肝官冠巻看陥乾勘患貫寒喚堪換敢棺款間閑勧寛幹感漢慣管関歓監緩憾還館環簡観韓艦鑑丸含岸岩玩眼頑顔願企伎危机気岐希忌汽奇祈季紀軌既記起飢鬼帰基寄著規亀喜幾揮期棋貴棄毀旗器機騎技宜偽欺義疑儀戯擬犠菊吉喫詰却客脚逆虐九久及弓丘旧休吸朽臼求究泣急級糾宮救球給嗅窮牛去巨居拒拠挙虚許距魚御漁凶共叫狂京享供協況峡挟狭恐恭胸脅強教郷境橋矯鏡競響驚仰暁業凝曲局極玉巾斤均近金菌勤琴筋僅禁緊錦謹襟吟銀区句苦駆具愚空偶遇隅串屈掘窟熊繰君訓勲薫軍郡群兄刑形系径泥恵慶慧憩掲携敬景渓系経継茎蛍計警軽鶏芸迎鯨劇撃激隙桁欠穴血決結傑潔月犬件見券肩建研県倹兼剣拳軒健険圏堅検嫌献絹遣権憲賢謙鍵繭顕験懸元幻玄言弦限原現舷減源厳己戸古呼固股虎孤弧故枯個庫湖雇誇鼓錮顧五互午後語誤護交侯候光公功効厚口向后坑好孔孝宏工巧幸広交康弘恒慌抗拘控攻更校構江洪狡甲皇硬稿紅絞綱耕考肯腕";
+    const kanjiList = fullJoyoKanji.split("");
+    
+    const reel1 = document.getElementById('reel1');
+    const reel2 = document.getElementById('reel2');
+    const button = document.getElementById('spinButton');
+    
+    let interval1, interval2;
+    let isSpinning = false;
+
+    function getRandomKanji() {
+      return kanjiList[Math.floor(Math.random() * kanjiList.length)];
+    }
+
+    function startSlot() {
+      isSpinning = true;
+      button.textContent = "命名";
+      button.style.backgroundColor = "#27ae60";
+      interval1 = setInterval(() => { reel1.textContent = getRandomKanji(); }, 50);
+      interval2 = setInterval(() => { reel2.textContent = getRandomKanji(); }, 50);
+    }
+
+    function stopSlot() {
+      clearInterval(interval1);
+      setTimeout(() => {
+        clearInterval(interval2);
+        isSpinning = false;
+        button.textContent = "輪転";
+        button.style.backgroundColor = "#c0392b";
+      }, 500);
+    }
+
+    button.addEventListener('click', () => {
+      if (isSpinning) { stopSlot(); } else { startSlot(); }
+    });
+  </script>
+</body>
+</html>
