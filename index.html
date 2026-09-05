@@ -3,6 +3,7 @@
 <html lang="ja"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
 <title>架空寺</title>
 <style>
 body {
@@ -56,6 +57,31 @@ li { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 10p
 li strong { flex: 1; font-size: 1.3rem; }
 li button, li a { font-size: .85rem; padding: 8px 12px; }
 
+/* Declare both palettes so the browser does not have to infer dark colors. */
+:root { color-scheme: light dark; }
+@media (prefers-color-scheme: dark) {
+  body { background: #1c201e; color: #eee9db; }
+  .slot-machine {
+    background: #292f2b;
+    color: #eee9db;
+    border-color: #aab7a7;
+    box-shadow: 0 8px 16px #0006;
+  }
+  .reel { border-right-color: #7a8779; }
+  .suffix { color: #bdc6ba; }
+  button, .share {
+    background: #343e36;
+    color: #eee9db;
+    border-color: #82907e;
+  }
+  #spinButton { background: #aa352a; color: #fff7ed; }
+  #spinButton[data-spinning="true"] { background: #25623d; }
+  button[aria-pressed="true"] { background: #c2cfb9; color: #1c201e; }
+  .note { color: #bac4b6; }
+  section { border-top-color: #7a8779; }
+  li { background: #292f2b; }
+  button:focus-visible, a:focus-visible { outline-color: #a9cbe5; }
+}
 </style>
 </head>
 
@@ -69,10 +95,11 @@ li button, li a { font-size: .85rem; padding: 8px 12px; }
 <div class="controls">
 <button id="autoButton" type="button" aria-pressed="false">自動輪転</button>
 <button id="favoriteButton" type="button" aria-pressed="false">御朱印</button>
+<button id="imageButton" type="button">拝受(保存)</button>
 <a id="shareButton" class="share" target="_blank" rel="noopener noreferrer" aria-disabled="false" href="https://twitter.com/intent/tweet?text=%E5%91%BD%E5%90%8D%EF%BC%9A%E6%86%B2%E9%A7%86%E5%AF%BA+%23%E6%9E%B6%E7%A9%BA%E5%AF%BA&amp;url=https%3A%2F%2Ftempleslot-tua3.vercel.app%2F">布教(Xに投稿)</a>
 </div>
 <p id="status" role="status" aria-live="polite">命名：架空寺</p>
-<p class="note">自動輪転は一秒回転し、命名後に一秒半待たれよ。<br>御朱印の拝受・布教の際は輪転を止める。</p>
+<p class="note">自動輪転は一秒回転し、命名後に一秒半待たれよ。<br>御朱印・御影の拝受・布教の際は輪転を止める。</p>
 <section aria-labelledby="favoritesTitle">
 <h2 id="favoritesTitle">御朱印帳 <span id="favoriteCount">1</span></h2>
 <p class="note">閲覧した者の経典に記される。記憶を失えば消え失せる。</p>
@@ -90,6 +117,7 @@ const $ = id => document.getElementById(id);
 const reel1 = $('reel1'), reel2 = $('reel2');
 const spinButton = $('spinButton'), autoButton = $('autoButton');
 const favoriteButton = $('favoriteButton'), shareButton = $('shareButton');
+const imageButton = document.getElementById('imageButton');
 const STORAGE_KEY = 'kakuji.favorites.v1';
 const AUTO_ROTATION_MS = 1000;
 const AUTO_PAUSE_MS = 1500;
@@ -131,6 +159,7 @@ function syncControls() {
   spinButton.textContent = idle ? '輪転' : state === 'stopping' ? '命名' : '命名';
   spinButton.dataset.spinning = String(!idle);
   favoriteButton.disabled = !idle;
+  imageButton.disabled = !idle;
   const saved = favorites.includes(currentName);
   favoriteButton.textContent = saved ? '拝受済' : '御朱印';
   favoriteButton.setAttribute('aria-pressed', String(saved));
@@ -167,6 +196,73 @@ function stopSlot() {
     if (auto) nextTimer = setTimeout(startSlot, AUTO_PAUSE_MS);
   }, REEL_STOP_DELAY_MS);
 }
+// Draw locally so image saving works without a server or external images.
+function saveTempleImage(name) {
+  if (!validName(name)) return;
+  pauseForAction();
+  try {
+    const canvas = document.createElement('canvas');
+    canvas.width = 1200;
+    canvas.height = 630;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) throw new Error('Canvas unavailable');
+    const fontFamily = getComputedStyle(document.body).fontFamily;
+    ctx.fillStyle = '#e9e4d4';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    // Match the original reel: white panel, dark rounded frame and dashed dividers.
+    ctx.save();
+    ctx.shadowColor = 'rgba(0,0,0,0.2)';
+    ctx.shadowBlur = 32;
+    ctx.shadowOffsetY = 16;
+    ctx.beginPath();
+    ctx.roundRect(160, 125, 880, 320, 16);
+    ctx.fillStyle = '#ffffff';
+    ctx.fill();
+    ctx.restore();
+    ctx.strokeStyle = '#2c3e50';
+    ctx.lineWidth = 10;
+    ctx.stroke();
+    const contentLeft = 206;
+    const cellWidth = 788 / 3;
+    ctx.save();
+    ctx.strokeStyle = '#cccccc';
+    ctx.lineWidth = 4;
+    ctx.setLineDash([10, 10]);
+    for (let index = 1; index <= 2; index++) {
+      const x = contentLeft + cellWidth * index;
+      ctx.beginPath();
+      ctx.moveTo(x, 179);
+      ctx.lineTo(x, 391);
+      ctx.stroke();
+    }
+    ctx.restore();
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.font = `600 192px ${fontFamily}`;
+    Array.from(name).forEach((character, index) => {
+      ctx.fillStyle = index === 2 ? '#7f8c8d' : '#2c3e50';
+      ctx.fillText(character, contentLeft + cellWidth * (index + 0.5), 285);
+    });
+    ctx.textAlign = 'right';
+    ctx.fillStyle = '#536052';
+    ctx.font = `400 24px ${fontFamily}`;
+    ctx.fillText('架空寺', 1152, 544);
+    ctx.font = '20px sans-serif';
+    ctx.fillText('https://templeslot-tua3.vercel.app/', 1152, 578);
+    const link = document.createElement('a');
+    link.href = canvas.toDataURL('image/png');
+    link.download = `架空寺_${name}_御影.png`;
+    document.body.append(link);
+    link.click();
+    link.remove();
+    $('status').textContent = '拝受完了';
+  } catch {
+    $('status').textContent = '御影を写せなかった。もう一度お試しあれ。';
+  }
+}
+imageButton.addEventListener('click', () => {
+  if (state === 'idle') saveTempleImage(currentName);
+});
 function renderFavorites() {
   $('favoritesList').replaceChildren();
   $('favoriteCount').textContent = String(favorites.length);
@@ -185,7 +281,11 @@ function renderFavorites() {
         renderFavorites(); syncControls(); $('status').textContent = `${name}を廃仏`;
       }
     });
-    row.append(label, share, remove); $('favoritesList').append(row);
+    const image = document.createElement('button');
+    image.type = 'button'; image.textContent = '拝受(保存)';
+    image.setAttribute('aria-label', `${name}の拝受(保存)`);
+    image.addEventListener('click', () => saveTempleImage(name));
+    row.append(label, share, remove, image); $('favoritesList').append(row);
   }
 }
 function pauseForAction() { setAuto(false); if (state === 'spinning') stopSlot(); }
@@ -229,3 +329,5 @@ loadFavorites(); renderFavorites(); syncControls();
 
 
 </body></html>
+
+
