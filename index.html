@@ -63,7 +63,7 @@ li button, li a { font-size: .85rem; padding: 8px 12px; }
 <main>
 <h1>架空寺</h1>
 <div class="slot-machine" aria-label="寺名のリール">
-<div id="reel1" class="reel">憲</div><div id="reel2" class="reel">駆</div><div class="suffix">寺</div>
+<div id="reel1" class="reel">架</div><div id="reel2" class="reel">空</div><div class="suffix">寺</div>
 </div>
 <button id="spinButton" type="button" data-spinning="false">輪転</button>
 <div class="controls">
@@ -71,7 +71,7 @@ li button, li a { font-size: .85rem; padding: 8px 12px; }
 <button id="favoriteButton" type="button" aria-pressed="false">御朱印</button>
 <a id="shareButton" class="share" target="_blank" rel="noopener noreferrer" aria-disabled="false" href="https://twitter.com/intent/tweet?text=%E5%91%BD%E5%90%8D%EF%BC%9A%E6%86%B2%E9%A7%86%E5%AF%BA+%23%E6%9E%B6%E7%A9%BA%E5%AF%BA&amp;url=https%3A%2F%2Ftempleslot-tua3.vercel.app%2F">布教(Xに投稿)</a>
 </div>
-<p id="status" role="status" aria-live="polite">命名：憲駆寺</p>
+<p id="status" role="status" aria-live="polite">命名：架空寺</p>
 <p class="note">自動輪転は一秒回転し、命名後に一秒半待たれよ。<br>御朱印の拝受・布教の際は輪転を止める。</p>
 <section aria-labelledby="favoritesTitle">
 <h2 id="favoritesTitle">御朱印帳 <span id="favoriteCount">1</span></h2>
@@ -132,7 +132,7 @@ function syncControls() {
   spinButton.dataset.spinning = String(!idle);
   favoriteButton.disabled = !idle;
   const saved = favorites.includes(currentName);
-  favoriteButton.textContent = saved ? '拝受済み' : '御朱印';
+  favoriteButton.textContent = saved ? '拝受済' : '御朱印';
   favoriteButton.setAttribute('aria-pressed', String(saved));
   shareButton.setAttribute('aria-disabled', String(!idle));
   if (idle) shareButton.href = shareUrl(currentName);
@@ -149,7 +149,7 @@ function randomKanji() { return kanjiList[Math.floor(Math.random() * kanjiList.l
 function startSlot() {
   if (state !== 'idle') return;
   state = 'spinning';
-  $('status').textContent = auto ? '自動輪転中' : '「命名」で止められよ。';
+  $('status').textContent = auto ? '自動輪転中' : '命名せよ';
   interval1 = setInterval(() => { reel1.textContent = randomKanji(); }, 50);
   interval2 = setInterval(() => { reel2.textContent = randomKanji(); }, 50);
   syncControls();
